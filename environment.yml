@@ -1,0 +1,29 @@
+name: aadhaar-analysis
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  - plotly
+  - scikit-learn
+  - jupyter
+  - ipykernel
+  - notebook
+  - pip
+  - pip:
+    - xgboost
+    - lightgbm
+    - torch
+    - prophet
+    - networkx
+    - geopandas
+    - streamlit
+    - pyyaml
+    - tqdm
+    - reportlab
+    - fpdf2
