@@ -200,12 +200,6 @@ class AadhaarFeatureEngineer:
         )
         
         # 3. Rolling 3-Month Update Average
-        total_updates = df['total_demographic_updates'] + df['total_biometric_updates']
-        df['rolling_3m_updates'] = df.groupby(['state', 'district'])[total_updates.name if hasattr(total_updates, 'name') else 0].transform(
-            lambda x: x.rolling(window=3, min_periods=1).mean()
-        ) if hasattr(total_updates, 'name') else total_updates.groupby(df.groupby(['state', 'district']).ngroup()).rolling(window=3, min_periods=1).mean().values
-        
-        # Simpler approach
         df['total_all_updates'] = df['total_demographic_updates'] + df['total_biometric_updates']
         df['rolling_3m_updates'] = df.groupby(['state', 'district'])['total_all_updates'].transform(
             lambda x: x.rolling(window=3, min_periods=1).mean()
