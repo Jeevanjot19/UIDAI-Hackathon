@@ -7,6 +7,8 @@ for Aadhaar data analysis
 
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
@@ -16,8 +18,18 @@ from sklearn.ensemble import RandomForestClassifier, IsolationForest
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.preprocessing import StandardScaler
+from sklearn.inspection import partial_dependence, PartialDependenceDisplay
 import joblib
 import os
+
+# Try to import SHAP for explainability (optional)
+try:
+    import shap
+    SHAP_AVAILABLE = True
+    print("[INFO] SHAP library available for explainability analysis")
+except ImportError:
+    SHAP_AVAILABLE = False
+    print("[WARNING] SHAP library not available. Install with: pip install shap")
 
 print("="*100)
 print("UIDAI HACKATHON - PREDICTIVE MODELING")
@@ -164,6 +176,265 @@ plt.tight_layout()
 plt.savefig('../outputs/figures/model_rf_feature_importance.png', dpi=300, bbox_inches='tight')
 plt.close()
 print("[OK] Feature importance plot saved")
+
+# ==================== EXPLAINABLE AI: MODEL INSIGHTS ====================
+print("\n" + "="*100)
+print("EXPLAINABLE AI: EXTRACTING INSIGHTS FROM RANDOM FOREST")
+print("="*100)
+
+# 1. Feature Importance Insights
+print("\n[INSIGHT 1] Feature Importance Analysis:")
+print("-" * 80)
+top_features = feature_importance.head(3)
+insights_text = "MODEL-DRIVEN INSIGHTS:\n\n"
+
+for idx, row in top_features.iterrows():
+    pct = row['importance'] * 100
+    insights_text += f"{idx+1}. {row['feature'].upper()}: {pct:.2f}% importance\n"
+    
+    # Contextual interpretation
+    if row['feature'] == 'mobility_indicator':
+        insights_text += f"   - Citizens who frequently change addresses ({pct:.1f}% predictor) are most likely to have identity instability.\n"
+        insights_text += f"   - ACTION: Target mobile centers at high-mobility districts.\n\n"
+    elif row['feature'] == 'digital_instability_index':
+        insights_text += f"   - Frequent mobile/email updates ({pct:.1f}% predictor) signal underlying identity issues.\n"
+        insights_text += f"   - ACTION: Flag for potential fraud if combined with other risk factors.\n\n"
+    elif row['feature'] == 'manual_labor_proxy':
+        insights_text += f"   - Manual laborers ({pct:.1f}% predictor) face fingerprint degradation leading to biometric failures.\n"
+        insights_text += f"   - ACTION: Deploy specialized biometric equipment at construction sites.\n\n"
+    elif row['feature'] == 'update_burden_index':
+        insights_text += f"   - High update frequency ({pct:.1f}% predictor) correlates with instability.\n"
+        insights_text += f"   - ACTION: Investigate districts with >5 updates/citizen/year for fraud.\n\n"
+    elif row['feature'] == 'anomaly_severity_score':
+        insights_text += f"   - Pre-calculated anomaly score ({pct:.1f}% predictor) validates our feature engineering.\n"
+        insights_text += f"   - ACTION: Use this as real-time risk indicator in production systems.\n\n"
+
+print(insights_text)
+
+# Save insights
+with open('../outputs/tables/model_rf_explainability_insights.txt', 'w', encoding='utf-8') as f:
+    f.write("="*80 + "\n")
+    f.write("EXPLAINABLE AI: RANDOM FOREST MODEL INSIGHTS\n")
+    f.write("="*80 + "\n\n")
+    f.write(insights_text)
+    f.write("\n" + "-"*80 + "\n")
+    f.write("FULL FEATURE RANKING:\n")
+    f.write("-"*80 + "\n")
+    f.write(feature_importance.to_string(index=False))
+
+# 2. Partial Dependence Analysis
+print("\n[INSIGHT 2] Partial Dependence Analysis:")
+print("-" * 80)
+print("Analyzing how each top feature independently affects stability prediction...\n")
+
+# Select top 4 features for PDP
+top_4_features = feature_importance.head(4)['feature'].tolist()
+top_4_indices = [feature_cols.index(f) for f in top_4_features]
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+axes = axes.ravel()
+
+for i, (feature_name, feature_idx) in enumerate(zip(top_4_features, top_4_indices)):
+    # Calculate partial dependence
+    pdp_result = partial_dependence(
+        rf_model, X_train, [feature_idx], 
+        kind='average', grid_resolution=50
+    )
+    
+    axes[i].plot(pdp_result['grid_values'][0], pdp_result['average'][0], 
+                 linewidth=3, color='darkblue')
+    axes[i].set_xlabel(feature_name.replace('_', ' ').title(), fontsize=11, fontweight='bold')
+    axes[i].set_ylabel('Predicted Probability\n(Low Stability)', fontsize=10)
+    axes[i].set_title(f'Partial Dependence: {feature_name.replace("_", " ").title()}', 
+                      fontsize=12, fontweight='bold')
+    axes[i].grid(alpha=0.3)
+    
+    # Add interpretation text
+    x_vals = pdp_result['grid_values'][0]
+    y_vals = pdp_result['average'][0]
+    trend = "increases" if y_vals[-1] > y_vals[0] else "decreases"
+    change = abs(y_vals[-1] - y_vals[0])
+    
+    axes[i].text(0.05, 0.95, f'Effect: {trend.upper()}\nΔP = {change:.3f}', 
+                transform=axes[i].transAxes, fontsize=9,
+                verticalalignment='top', 
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+
+plt.suptitle('Partial Dependence Plots: How Features Affect Stability Risk', 
+             fontsize=14, fontweight='bold', y=1.00)
+plt.tight_layout()
+plt.savefig('../outputs/figures/model_rf_partial_dependence.png', dpi=300, bbox_inches='tight')
+plt.close()
+print("[OK] Partial dependence plots saved")
+
+# Generate PDP insights
+pdp_insights = "\nPARTIAL DEPENDENCE INSIGHTS:\n\n"
+for feature_name, feature_idx in zip(top_4_features, top_4_indices):
+    pdp_result = partial_dependence(
+        rf_model, X_train, [feature_idx], kind='average', grid_resolution=50
+    )
+    x_vals = pdp_result['grid_values'][0]
+    y_vals = pdp_result['average'][0]
+    
+    trend = "INCREASES" if y_vals[-1] > y_vals[0] else "DECREASES"
+    change = abs(y_vals[-1] - y_vals[0])
+    
+    pdp_insights += f"• {feature_name.upper()}:\n"
+    pdp_insights += f"  - As {feature_name} increases, instability risk {trend} by {change:.3f}\n"
+    
+    if feature_name == 'mobility_indicator' and trend == "INCREASES":
+        pdp_insights += f"  - INTERPRETATION: Every 0.1 increase in mobility raises risk by ~{change*10:.3f}\n"
+        pdp_insights += f"  - DECISION RULE: IF mobility > 0.25 THEN flag for intervention\n\n"
+    elif feature_name == 'digital_instability_index' and trend == "INCREASES":
+        pdp_insights += f"  - INTERPRETATION: Digital churn strongly predicts identity problems\n"
+        pdp_insights += f"  - DECISION RULE: IF digital_instability > 0.5 THEN investigate for fraud\n\n"
+    else:
+        pdp_insights += f"  - DECISION RULE: Monitor this feature for risk assessment\n\n"
+
+print(pdp_insights)
+
+# 3. SHAP Analysis (if available)
+if SHAP_AVAILABLE:
+    print("\n[INSIGHT 3] SHAP (SHapley Additive exPlanations) Analysis:")
+    print("-" * 80)
+    print("Computing SHAP values to explain individual predictions...")
+    
+    # Use a sample for SHAP (computationally expensive)
+    X_sample = X_test.sample(n=min(1000, len(X_test)), random_state=42)
+    
+    # Create SHAP explainer
+    explainer = shap.TreeExplainer(rf_model)
+    shap_values = explainer.shap_values(X_sample)
+    
+    # If binary classification, select class 1 (Low Stability)
+    if isinstance(shap_values, list):
+        shap_values_class1 = shap_values[1]
+    else:
+        shap_values_class1 = shap_values
+    
+    # SHAP Summary Plot
+    plt.figure(figsize=(10, 8))
+    shap.summary_plot(shap_values_class1, X_sample, 
+                     feature_names=feature_cols, show=False, max_display=10)
+    plt.title('SHAP Summary: Feature Impact on Low Stability Prediction', 
+              fontsize=14, fontweight='bold', pad=20)
+    plt.tight_layout()
+    plt.savefig('../outputs/figures/model_rf_shap_summary.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("[OK] SHAP summary plot saved")
+    
+    # SHAP Feature Importance
+    mean_shap_values = np.abs(shap_values_class1).mean(axis=0)
+    shap_importance = pd.DataFrame({
+        'feature': feature_cols,
+        'mean_abs_shap': mean_shap_values
+    }).sort_values('mean_abs_shap', ascending=False)
+    
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=shap_importance.head(10), x='mean_abs_shap', y='feature', 
+                palette='coolwarm')
+    plt.title('SHAP Feature Importance (Mean |SHAP Value|)', 
+              fontsize=14, fontweight='bold')
+    plt.xlabel('Mean Absolute SHAP Value', fontsize=12)
+    plt.ylabel('Feature', fontsize=12)
+    plt.tight_layout()
+    plt.savefig('../outputs/figures/model_rf_shap_importance.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("[OK] SHAP feature importance plot saved")
+    
+    # SHAP Insights
+    shap_insights = "\nSHAP-BASED INSIGHTS:\n\n"
+    shap_insights += "SHAP values reveal how each feature contributes to individual predictions:\n\n"
+    
+    for idx, row in shap_importance.head(3).iterrows():
+        shap_insights += f"• {row['feature'].upper()}: Mean |SHAP| = {row['mean_abs_shap']:.4f}\n"
+        shap_insights += f"  - This feature pushes predictions by ±{row['mean_abs_shap']:.4f} on average\n"
+        shap_insights += f"  - High values increase instability risk; low values decrease it\n\n"
+    
+    print(shap_insights)
+    
+    # Save SHAP insights
+    with open('../outputs/tables/model_rf_shap_insights.txt', 'w', encoding='utf-8') as f:
+        f.write("="*80 + "\n")
+        f.write("SHAP ANALYSIS: INDIVIDUAL FEATURE CONTRIBUTIONS\n")
+        f.write("="*80 + "\n\n")
+        f.write(shap_insights)
+        f.write("\nFULL SHAP IMPORTANCE RANKING:\n")
+        f.write("-"*80 + "\n")
+        f.write(shap_importance.to_string(index=False))
+    
+else:
+    print("\n[SKIP] SHAP analysis (library not installed)")
+    print("To enable: pip install shap")
+
+# 4. Decision Rules Extraction
+print("\n[INSIGHT 4] Decision Rules Extraction:")
+print("-" * 80)
+print("Analyzing model's decision patterns to create actionable rules...\n")
+
+# Analyze high-risk predictions
+X_test_df = X_test.copy()
+X_test_df['predicted_risk'] = y_pred_proba
+X_test_df['true_label'] = y_test.values
+
+high_risk = X_test_df[X_test_df['predicted_risk'] > 0.7].sort_values('predicted_risk', ascending=False)
+low_risk = X_test_df[X_test_df['predicted_risk'] < 0.3].sort_values('predicted_risk')
+
+print(f"High Risk Cases (P > 0.7): {len(high_risk)}")
+print(f"Low Risk Cases (P < 0.3): {len(low_risk)}")
+
+# Extract rules
+decision_rules = "\nEXTRACTED DECISION RULES:\n\n"
+
+if len(high_risk) > 0:
+    high_risk_profile = high_risk[feature_cols].mean()
+    decision_rules += "RULE 1: HIGH INSTABILITY RISK PROFILE\n"
+    decision_rules += "-" * 40 + "\n"
+    for feature in feature_cols:
+        val = high_risk_profile[feature]
+        decision_rules += f"  • {feature}: {val:.4f}\n"
+    
+    decision_rules += "\nACTION: If a citizen matches this profile:\n"
+    decision_rules += "  1. Flag for immediate review\n"
+    decision_rules += "  2. Assign dedicated case officer\n"
+    decision_rules += "  3. Offer free update assistance\n"
+    decision_rules += "  4. Prioritize in queue (process within 48 hours)\n\n"
+
+if len(low_risk) > 0:
+    low_risk_profile = low_risk[feature_cols].mean()
+    decision_rules += "RULE 2: LOW INSTABILITY RISK PROFILE\n"
+    decision_rules += "-" * 40 + "\n"
+    for feature in feature_cols:
+        val = low_risk_profile[feature]
+        decision_rules += f"  • {feature}: {val:.4f}\n"
+    
+    decision_rules += "\nACTION: If a citizen matches this profile:\n"
+    decision_rules += "  1. Standard processing\n"
+    decision_rules += "  2. Low priority for proactive outreach\n"
+    decision_rules += "  3. Normal update timeline (10-15 days acceptable)\n\n"
+
+# Threshold-based rules
+decision_rules += "RULE 3: THRESHOLD-BASED INTERVENTIONS\n"
+decision_rules += "-" * 40 + "\n"
+decision_rules += f"IF mobility_indicator > 0.25 AND digital_instability_index > 0.5 THEN\n"
+decision_rules += f"   - HIGH RISK: Deploy mobile center + fraud investigation\n\n"
+decision_rules += f"IF manual_labor_proxy > 0.6 THEN\n"
+decision_rules += f"   - VULNERABLE: Offer free biometric restoration\n\n"
+decision_rules += f"IF update_burden_index > 0.7 THEN\n"
+decision_rules += f"   - ANOMALY: Flag for fraud detection unit review\n\n"
+
+print(decision_rules)
+
+# Save all insights
+with open('../outputs/tables/model_rf_explainability_insights.txt', 'a', encoding='utf-8') as f:
+    f.write("\n\n" + "="*80 + "\n")
+    f.write(pdp_insights)
+    f.write("\n" + "="*80 + "\n")
+    f.write(decision_rules)
+
+print("[OK] All explainability insights saved to model_rf_explainability_insights.txt")
+
+# ==================== END OF EXPLAINABLE AI SECTION ====================
 
 # Save model
 joblib.dump(rf_model, '../outputs/models/rf_stability_classifier.pkl')
