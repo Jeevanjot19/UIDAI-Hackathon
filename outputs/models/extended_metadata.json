@@ -1,0 +1,20 @@
+{
+  "n_features": 171,
+  "n_train": 235814,
+  "n_test": 58954,
+  "roc_auc": 1.0,
+  "balanced_accuracy": 1.0,
+  "f1_score": 1.0,
+  "optimal_threshold": 0.3,
+  "scale_pos_weight": 0.2577417462264654,
+  "hyperparameters": {
+    "n_estimators": 200,
+    "learning_rate": 0.05,
+    "max_depth": 10,
+    "min_child_weight": 30,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8
+  },
+  "top_feature": "future_updates_3m",
+  "top_feature_importance": 0.7734195590019226
+}
