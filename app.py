@@ -13,14 +13,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 from PIL import Image
-
-# Optional SHAP import (for Streamlit Cloud compatibility)
-try:
-    import shap
-    SHAP_AVAILABLE = True
-except Exception:
-    SHAP_AVAILABLE = False
-
+import shap
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -68,7 +61,7 @@ st.markdown("""
 @st.cache_data
 def load_data():
     """Load processed data"""
-    df = pd.read_csv('data/processed/aadhaar_with_indices.csv')
+    df = pd.read_csv('data/processed/aadhaar_extended_features.csv')
     return df
 
 @st.cache_resource
@@ -95,9 +88,7 @@ def load_models():
 
 @st.cache_data
 def load_shap_data():
-    """Load SHAP analysis results (returns None if not available)"""
-    if not SHAP_AVAILABLE:
-        return None, None
+    """Load SHAP analysis results"""
     try:
         with open('outputs/models/shap_values.pkl', 'rb') as f:
             shap_data = pickle.load(f)
@@ -1001,60 +992,6 @@ elif page == "💡 SHAP Explainability":
     
     # Load SHAP data
     shap_data, shap_importance = load_shap_data()
-    
-    if not SHAP_AVAILABLE:
-        st.info("""
-        ### 🔍 Explainability Feature Note
-        
-        **SHAP (SHapley Additive exPlanations)** is implemented in this project to provide full model transparency.
-        
-        However, due to dependency constraints on Streamlit Cloud (SHAP requires heavy C++ compilation libraries), 
-        the interactive SHAP visualizations are disabled in this public deployment.
-        
-        **✅ Full SHAP explainability is demonstrated in:**
-        - Local deployment (all features work)
-        - Submitted technical documentation
-        - Video demonstration
-        - Code repository (complete implementation)
-        
-        **📊 Alternative: Built-in Feature Importance**
-        
-        Below is the XGBoost model's built-in feature importance as a fallback:
-        """)
-        
-        # Show XGBoost feature importance as fallback
-        try:
-            model = models['xgboost']
-            if hasattr(model, 'feature_importances_'):
-                feature_cols = [col for col in df.columns if col not in [
-                    'date', 'state', 'district', 'high_updater_3m', 'cluster',
-                    'total_enrolments', 'total_updates'
-                ]]
-                
-                importance_df = pd.DataFrame({
-                    'Feature': feature_cols,
-                    'Importance': model.feature_importances_
-                }).sort_values('Importance', ascending=False).head(20)
-                
-                fig = px.bar(importance_df, x='Importance', y='Feature', orientation='h',
-                           title='Top 20 Features by XGBoost Importance',
-                           color='Importance', color_continuous_scale='Viridis')
-                fig.update_layout(height=600, yaxis={'categoryorder':'total ascending'})
-                st.plotly_chart(fig, use_container_width=True)
-                
-                st.markdown("""
-                <div class="insight-box">
-                📌 <strong>Key Insights:</strong><br>
-                • Recent activity patterns (rolling 3-month updates) are most predictive<br>
-                • Update intensity and growth rates drive predictions<br>
-                • Composite indices (digital inclusion, service quality) matter significantly<br>
-                • Geographic and demographic factors play supporting roles
-                </div>
-                """, unsafe_allow_html=True)
-        except Exception as e:
-            st.error(f"Could not load feature importance: {str(e)}")
-        
-        st.stop()
     
     if shap_data is None:
         st.warning("⚠️ SHAP analysis not available. Generating SHAP values...")

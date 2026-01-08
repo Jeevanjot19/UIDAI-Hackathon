@@ -3,3 +3,5 @@ data/processed/aadhaar_with_indices.csv filter=lfs diff=lfs merge=lfs -text
 data/raw/*.csv filter=lfs diff=lfs merge=lfs -text
 data/processed/*.csv filter=lfs diff=lfs merge=lfs -text
 outputs/figures/*.png filter=lfs diff=lfs merge=lfs -text
+data/processed/aadhaar_extended_features.csv filter=lfs diff=lfs merge=lfs -text
+outputs/models/*.pkl filter=lfs diff=lfs merge=lfs -text
