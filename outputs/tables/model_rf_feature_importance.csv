@@ -1,0 +1,11 @@
+feature,importance
+mobility_indicator,0.32709537852218595
+digital_instability_index,0.3120841295424086
+manual_labor_proxy,0.1568455256028983
+update_burden_index,0.09016925324482507
+demographic_update_rate,0.05043393723598976
+biometric_update_rate,0.03580186410336117
+adult_enrolment_share,0.012493088643231206
+seasonal_variance_score,0.010412855773570946
+anomaly_severity_score,0.004108779106720363
+enrolment_growth_rate,0.0005551882248085946

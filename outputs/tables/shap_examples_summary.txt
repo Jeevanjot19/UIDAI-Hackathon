@@ -1,0 +1,42 @@
+
+============================================================
+High Confidence Positive
+============================================================
+Predicted Probability: 0.9141
+Actual Label: 1
+
+Top 5 Contributing Features:
+  - rolling_3m_updates: +0.6383 (INCREASES probability)
+  - updates_ma3: +0.4807 (INCREASES probability)
+  - cumulative_enrolments: +0.3720 (INCREASES probability)
+  - updates_lag_1: +0.1335 (INCREASES probability)
+  - month_sin: +0.1197 (INCREASES probability)
+
+
+============================================================
+High Confidence Negative
+============================================================
+Predicted Probability: 0.0402
+Actual Label: 0
+
+Top 5 Contributing Features:
+  - rolling_3m_updates: -2.0902 (DECREASES probability)
+  - updates_ma3: -0.3980 (DECREASES probability)
+  - total_all_updates: -0.1233 (DECREASES probability)
+  - updates_lag_1: -0.1060 (DECREASES probability)
+  - month: -0.1017 (DECREASES probability)
+
+
+============================================================
+Uncertain
+============================================================
+Predicted Probability: 0.5380
+Actual Label: 1
+
+Top 5 Contributing Features:
+  - rolling_3m_updates: -0.3165 (DECREASES probability)
+  - cumulative_enrolments: +0.2279 (INCREASES probability)
+  - updates_ma3: +0.2268 (INCREASES probability)
+  - update_velocity: +0.1391 (INCREASES probability)
+  - updates_lag_3: +0.1208 (INCREASES probability)
+

@@ -1,0 +1,33 @@
+================================================================================
+EXPLAINABLE AI: RANDOM FOREST MODEL INSIGHTS
+================================================================================
+
+MODEL-DRIVEN INSIGHTS:
+
+1. MOBILITY_INDICATOR: 32.71% importance
+   - Citizens who frequently change addresses (32.7% predictor) are most likely to have identity instability.
+   - ACTION: Target mobile centers at high-mobility districts.
+
+2. DIGITAL_INSTABILITY_INDEX: 31.21% importance
+   - Frequent mobile/email updates (31.2% predictor) signal underlying identity issues.
+   - ACTION: Flag for potential fraud if combined with other risk factors.
+
+4. MANUAL_LABOR_PROXY: 15.68% importance
+   - Manual laborers (15.7% predictor) face fingerprint degradation leading to biometric failures.
+   - ACTION: Deploy specialized biometric equipment at construction sites.
+
+
+--------------------------------------------------------------------------------
+FULL FEATURE RANKING:
+--------------------------------------------------------------------------------
+                  feature  importance
+       mobility_indicator    0.327095
+digital_instability_index    0.312084
+       manual_labor_proxy    0.156846
+      update_burden_index    0.090169
+  demographic_update_rate    0.050434
+    biometric_update_rate    0.035802
+    adult_enrolment_share    0.012493
+  seasonal_variance_score    0.010413
+   anomaly_severity_score    0.004109
+    enrolment_growth_rate    0.000555

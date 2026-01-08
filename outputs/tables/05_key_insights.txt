@@ -1,0 +1,8 @@
+KEY INSIGHTS - TRIVARIATE ANALYSIS
+====================================================================================================
+
+1. SEASONALITY: enrolments_0_5 shows highest seasonal mobility (peak=0.304)
+2. MARCH MIGRATION: Rajasthan, Madhya Pradesh, Chhattisgarh show peak mobility in March
+3. UPDATES: Uttar Pradesh has highest total updates (45% address, 35% mobile)
+4. VULNERABLE CLUSTER: 1 states show high mobility + low stability
+5. PATTERN: Manual labor correlates with biometric updates AND mobility (migrant workers)
