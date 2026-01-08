@@ -1,3 +1,15 @@
+---
+title: UIDAI Hackathon 2026 - Aadhaar Analytics
+emoji: 🏛️
+colorFrom: blue
+colorTo: purple
+sdk: streamlit
+sdk_version: 1.29.0
+app_file: app.py
+pinned: false
+license: mit
+---
+
 # Aadhaar Societal Intelligence Project
 ## *Unlocking Societal Trends in Aadhaar Enrolment and Updates*
 
