@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Data files
+data/raw/*
+!data/raw/.gitkeep
+# Exclude all processed files EXCEPT the main dataset
+data/processed/*
+!data/processed/aadhaar_extended_features.csv
+!data/processed/.gitkeep
+
+# Models - Allow specific model files needed for deployment
+outputs/models/*
+!outputs/models/xgboost_balanced.pkl
+!outputs/models/extended_metadata.json
+!outputs/models/balanced_metadata.json
+!outputs/models/extended_features.txt
+!outputs/models/balanced_features.txt
+!outputs/models/.gitkeep
+models/*
+!models/.gitkeep
+
+# Outputs
+outputs/figures/*
+!outputs/figures/.gitkeep
+outputs/tables/*
+!outputs/tables/.gitkeep
+outputs/insights/*
+!outputs/insights/.gitkeep
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.svg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.venv
+
+# Logs
+*.log
+
+# Cache
+.cache/
+.pytest_cache/
