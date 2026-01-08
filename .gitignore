@@ -27,21 +27,31 @@ wheels/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Data files
+# Data files (block most, allow critical dashboard files)
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-*.csv
+!data/processed/aadhaar_with_indices.csv
 *.xlsx
 *.xls
 *.parquet
 *.feather
 
-# Models
+# Block other CSVs except critical ones
+*.csv
+!data/processed/aadhaar_with_indices.csv
+!outputs/tables/shap_feature_importance.csv
+!outputs/models/extended_feature_importance.csv
+
+# Models (block most, allow critical dashboard models)
 models/*
 !models/.gitkeep
 *.pkl
+!outputs/models/xgboost_extended_193.pkl
+!outputs/models/kmeans_district_clustering.pkl
+!outputs/models/isolation_forest_enhanced.pkl
+!outputs/models/shap_values.pkl
 *.h5
 *.pt
 *.pth
