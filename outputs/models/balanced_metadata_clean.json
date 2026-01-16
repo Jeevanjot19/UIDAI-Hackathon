@@ -1,0 +1,25 @@
+{
+  "technique": "SMOTE + Optimized Hyperparameters",
+  "optimal_threshold": 0.9997945427894592,
+  "roc_auc": 1.0,
+  "balanced_accuracy": 1.0,
+  "f1_score": 1.0,
+  "training_samples": 318080,
+  "test_samples": 79521,
+  "n_features": 178,
+  "class_distribution": {
+    "low_updaters": 86913,
+    "high_updaters": 310688,
+    "low_pct": 21.85935146038365,
+    "high_pct": 78.14064853961635
+  },
+  "per_class_accuracy": {
+    "low_updater": 1.0,
+    "high_updater": 1.0
+  },
+  "trained_on": "clean_deduplicated_data",
+  "original_records": 439006,
+  "clean_records": 397601,
+  "duplicates_removed": 41403,
+  "timestamp": "2026-01-14 11:55:43"
+}

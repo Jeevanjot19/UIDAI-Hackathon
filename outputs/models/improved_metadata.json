@@ -1,9 +1,10 @@
 {
-  "technique": "SMOTE + Optimized Hyperparameters",
-  "roc_auc": 0.7851305248820564,
-  "accuracy": 0.8212910867633995,
-  "optimal_threshold": 0.5,
-  "original_ratio": 3.5227111170634715,
+  "technique": "Improved XGBoost",
+  "roc_auc": 0.840698443438788,
+  "accuracy": 0.8407439466071388,
+  "improvement_over_original": 7.618837076363782,
+  "original_roc_auc": 0.7645100726751501,
+  "original_accuracy": 0.7957677501651443,
   "features": [
     "enrolments_0_5",
     "enrolments_5_17",
@@ -109,14 +110,5 @@
     "citizen_engagement_index"
   ],
   "test_size": 87802,
-  "train_size": 351204,
-  "hyperparameters": {
-    "max_depth": 6,
-    "learning_rate": 0.05,
-    "n_estimators": 300,
-    "min_child_weight": 3,
-    "gamma": 0.1,
-    "subsample": 0.8,
-    "colsample_bytree": 0.8
-  }
+  "train_size": 547102
 }

@@ -27,36 +27,61 @@ wheels/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Data files
+# Data files - Allow main dataset (tracked via LFS)
 data/raw/*
 !data/raw/.gitkeep
-# Exclude all processed files EXCEPT the main dataset
 data/processed/*
 !data/processed/aadhaar_extended_features.csv
+!data/processed/aadhaar_extended_features_clean.csv
 !data/processed/.gitkeep
 
-# Models - Allow specific model files needed for deployment
+# Models - Allow latest model files
 outputs/models/*
-!outputs/models/xgboost_balanced.pkl
-!outputs/models/extended_metadata.json
-!outputs/models/balanced_metadata.json
-!outputs/models/extended_features.txt
-!outputs/models/balanced_features.txt
+!outputs/models/xgboost_balanced_clean_v2.pkl
+!outputs/models/balanced_metadata_clean_v2.json
+!outputs/models/xgboost_no_leakage.pkl
+!outputs/models/metadata_no_leakage.json
+!outputs/models/xgboost_balanced_clean.pkl
+!outputs/models/balanced_metadata_clean.json
+!outputs/models/xgboost_v3.pkl
+!outputs/models/scaler_v3.pkl
+!outputs/models/shap_values.pkl
+!outputs/models/kmeans_district_clustering.pkl
+!outputs/models/scaler_clustering.pkl
 !outputs/models/.gitkeep
 models/*
 !models/.gitkeep
 
-# Outputs
+# Outputs - Allow essential output files
 outputs/figures/*
 !outputs/figures/.gitkeep
 outputs/tables/*
+!outputs/tables/shap_feature_importance.csv
+!outputs/tables/district_index_rankings.csv
+!outputs/tables/state_index_rankings.csv
 !outputs/tables/.gitkeep
 outputs/insights/*
 !outputs/insights/.gitkeep
+outputs/forecasts/*
+!outputs/forecasts/historical_monthly.csv
+!outputs/forecasts/arima_6m_forecast.csv
+!outputs/forecasts/prophet_6m_forecast.csv
+!outputs/forecasts/.gitkeep
+
+# Innovation outputs - Allow these
+!outputs/district_threat_scores.csv
+!outputs/anomaly_detection_results.csv
+!outputs/temporal_anomaly_patterns.csv
+!outputs/ensemble_model_comparison.csv
+!outputs/realtime_alerts.json
+!outputs/synthetic_aadhaar_data_10k.csv
+
+# Images and PDFs - Allow submission PDF only
 *.png
 *.jpg
 *.jpeg
 *.pdf
+!UIDAI_Hackathon_Comprehensive_Submission.pdf
 *.svg
 
 # IDE

@@ -1,0 +1,14 @@
+{
+  "model_version": "v3_tuned",
+  "features_count": 154,
+  "roc_auc": 1.0,
+  "f1_score": 1.0,
+  "balanced_accuracy": 1.0,
+  "optimal_threshold": 0.3,
+  "best_params": {
+    "learning_rate": 0.03,
+    "max_depth": 7,
+    "n_estimators": 250
+  },
+  "cv_score": 1.0
+}

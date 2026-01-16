@@ -1,0 +1,34 @@
+{
+  "demographic_features": [
+    "address_updates",
+    "mobile_updates",
+    "name_updates",
+    "dob_updates",
+    "gender_updates",
+    "total_demographic_updates",
+    "demographic_updates_5_17",
+    "demographic_updates_18_plus",
+    "demographic_intensity",
+    "mobile_intensity",
+    "demo_update_rate",
+    "mobile_update_rate",
+    "name_update_rate",
+    "address_update_rate"
+  ],
+  "biometric_features": [
+    "fingerprint_updates",
+    "iris_updates",
+    "total_biometric_updates",
+    "biometric_updates_5_17",
+    "biometric_updates_18_plus",
+    "biometric_intensity",
+    "fingerprint_update_rate",
+    "iris_update_rate",
+    "bio_update_rate"
+  ],
+  "behavioral_features": [
+    "total_updates",
+    "update_intensity",
+    "bio_demo_ratio"
+  ]
+}

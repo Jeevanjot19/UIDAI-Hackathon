@@ -1,9 +1,13 @@
 {
+  "model_type": "XGBoost Classifier",
+  "version": "v3",
   "technique": "SMOTE + Optimized Hyperparameters",
-  "roc_auc": 0.7851305248820564,
-  "accuracy": 0.8212910867633995,
-  "optimal_threshold": 0.5,
-  "original_ratio": 3.5227111170634715,
+  "roc_auc": 0.721465696433985,
+  "f1_score": 0.8554862953495311,
+  "precision": 0.7649510404799331,
+  "recall": 0.9703289064500786,
+  "optimal_threshold": 0.3,
+  "features_count": 82,
   "features": [
     "enrolments_0_5",
     "enrolments_5_17",
@@ -86,37 +90,8 @@
     "updates_ma3",
     "enrolment_velocity",
     "update_velocity",
-    "is_high_mobility",
-    "mobile_digital_score",
-    "saturation_score",
-    "stability_score",
-    "online_update_score",
-    "digital_inclusion_index",
-    "accessibility_score",
-    "burden_score",
-    "compliance_score",
-    "resilience_score",
-    "service_quality_score",
-    "maturity_saturation",
-    "maturity_stability",
-    "maturity_compliance",
-    "maturity_steady",
-    "aadhaar_maturity_index",
-    "engagement_frequency",
-    "engagement_biometric",
-    "engagement_mobility",
-    "engagement_address",
-    "citizen_engagement_index"
+    "is_high_mobility"
   ],
-  "test_size": 87802,
-  "train_size": 351204,
-  "hyperparameters": {
-    "max_depth": 6,
-    "learning_rate": 0.05,
-    "n_estimators": 300,
-    "min_child_weight": 3,
-    "gamma": 0.1,
-    "subsample": 0.8,
-    "colsample_bytree": 0.8
-  }
+  "test_size": 76313,
+  "evaluated_on": "2026-01-14 19:53:08"
 }

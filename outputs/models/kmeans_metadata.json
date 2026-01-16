@@ -1,0 +1,33 @@
+{
+  "model_type": "K-Means Clustering",
+  "n_clusters": 5,
+  "n_features": 9,
+  "features": [
+    "rolling_3m_updates",
+    "updates_per_1000",
+    "saturation_ratio",
+    "digital_inclusion_index",
+    "citizen_engagement_index",
+    "aadhaar_maturity_index",
+    "mobile_intensity",
+    "biometric_intensity",
+    "address_intensity"
+  ],
+  "quality_metrics": {
+    "silhouette_score": 0.44771603889137684,
+    "davies_bouldin_index": 0.8039712294478253,
+    "calinski_harabasz_index": 287454.40005037695,
+    "inertia": 919454.994970538
+  },
+  "cluster_sizes": {
+    "0": 87691,
+    "1": 138324,
+    "2": 154457,
+    "3": 15723,
+    "4": 1406
+  },
+  "training_samples": 397601,
+  "algorithm": "sklearn.cluster.KMeans",
+  "random_state": 42,
+  "n_init": 10
+}

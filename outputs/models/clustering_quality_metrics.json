@@ -1,0 +1,32 @@
+{
+  "silhouette_score": 0.44771603889137684,
+  "davies_bouldin_index": 0.8039712294478253,
+  "calinski_harabasz_index": 287454.40005037695,
+  "inertia": 919454.994970538,
+  "n_clusters": 5,
+  "n_samples": 397601,
+  "n_features": 9,
+  "features": [
+    "rolling_3m_updates",
+    "updates_per_1000",
+    "saturation_ratio",
+    "digital_inclusion_index",
+    "citizen_engagement_index",
+    "aadhaar_maturity_index",
+    "mobile_intensity",
+    "biometric_intensity",
+    "address_intensity"
+  ],
+  "cluster_distribution": {
+    "0": 87691,
+    "1": 138324,
+    "2": 154457,
+    "3": 15723,
+    "4": 1406
+  },
+  "quality_assessment": {
+    "silhouette": "GOOD",
+    "davies_bouldin": "EXCELLENT",
+    "calinski_harabasz": "EXCELLENT"
+  }
+}
