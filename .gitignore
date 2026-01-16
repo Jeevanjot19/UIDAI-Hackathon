@@ -27,9 +27,8 @@ wheels/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Data files - Allow main dataset (tracked via LFS)
-data/raw/*
-!data/raw/.gitkeep
+# Data files - Allow all datasets (tracked via LFS)
+# Raw data is now tracked - needed for complete reproducibility
 data/processed/*
 !data/processed/aadhaar_extended_features.csv
 !data/processed/aadhaar_extended_features_clean.csv
