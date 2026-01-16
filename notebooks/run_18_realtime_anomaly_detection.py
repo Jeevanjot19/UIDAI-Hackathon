@@ -137,13 +137,14 @@ district_threat_scores.columns = [
 ]
 
 # Calculate composite threat score (0-100)
+# Each component already scaled appropriately, just sum them
 district_threat_scores['threat_score'] = (
-    district_threat_scores['anomaly_rate'] * 40 +
-    (1 - (district_threat_scores['avg_anomaly_score'] + 0.5)) * 30 +  # Normalize to 0-1
-    district_threat_scores['extreme_enrolment_rate'] * 10 +
-    district_threat_scores['extreme_biometric_rate'] * 10 +
-    district_threat_scores['extreme_demographic_rate'] * 10
-) * 100
+    district_threat_scores['anomaly_rate'].clip(0, 1) * 40 +  # Cap at 100% = 40 points
+    (1 - (district_threat_scores['avg_anomaly_score'] + 0.5)).clip(0, 1) * 30 +  # 30 points
+    district_threat_scores['extreme_enrolment_rate'].clip(0, 1) * 10 +  # 10 points
+    district_threat_scores['extreme_biometric_rate'].clip(0, 1) * 10 +  # 10 points
+    district_threat_scores['extreme_demographic_rate'].clip(0, 1) * 10  # 10 points
+)  # Total max = 100 points
 
 # Classify threat levels
 district_threat_scores['threat_level'] = pd.cut(
