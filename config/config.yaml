@@ -1,0 +1,137 @@
+# Aadhaar Societal Intelligence Project Configuration
+
+# Random seed for reproducibility
+random_seed: 42
+
+# Data paths
+data:
+  raw:
+    enrolment: "data/raw/enrolment/"
+    demographic: "data/raw/demographic_update/"
+    biometric: "data/raw/biometric_update/"
+  processed: "data/processed/"
+  
+# Date range for analysis
+date_range:
+  start: "2020-01-01"
+  end: "2025-12-31"
+
+# Feature engineering parameters
+features:
+  temporal:
+    rolling_window: 3  # months
+    seasonal_period: 12  # months
+  
+  normalization:
+    method: "minmax"  # or "standard"
+    
+  thresholds:
+    high_mobility: 0.7
+    high_instability: 0.6
+    low_stability: 0.3
+
+# Model configurations
+models:
+  forecasting:
+    prophet:
+      changepoint_prior_scale: 0.05
+      seasonality_prior_scale: 10
+      yearly_seasonality: true
+      weekly_seasonality: false
+      daily_seasonality: false
+    
+    lstm:
+      units: [128, 64, 32]
+      dropout: 0.2
+      epochs: 100
+      batch_size: 32
+      learning_rate: 0.001
+      lookback_window: 12  # months
+      forecast_horizon: 3  # months
+  
+  anomaly_detection:
+    isolation_forest:
+      contamination: 0.05
+      n_estimators: 100
+      max_samples: 256
+    
+    transformer:
+      d_model: 64
+      nhead: 4
+      num_layers: 2
+      dropout: 0.1
+      epochs: 50
+  
+  clustering:
+    kmeans:
+      n_clusters: 5
+      random_state: 42
+      max_iter: 300
+    
+    dbscan:
+      eps: 0.5
+      min_samples: 10
+  
+  classification:
+    random_forest:
+      n_estimators: 200
+      max_depth: 15
+      min_samples_split: 10
+      random_state: 42
+    
+    xgboost:
+      max_depth: 6
+      learning_rate: 0.1
+      n_estimators: 100
+      objective: "multi:softmax"
+      num_class: 3
+
+# Visualization settings
+visualization:
+  style: "seaborn-v0_8-darkgrid"
+  palette: "Set2"
+  figure_size: [12, 8]
+  dpi: 300
+  font_size: 12
+  save_format: "png"
+  
+  colors:
+    primary: "#2E86AB"
+    secondary: "#A23B72"
+    accent: "#F18F01"
+    success: "#06A77D"
+    warning: "#D62246"
+
+# Analysis parameters
+analysis:
+  train_test_split: 0.8
+  cross_validation_folds: 5
+  confidence_level: 0.95
+  
+  geographic_levels:
+    - "state"
+    - "district"
+    - "pincode"
+  
+  age_groups:
+    - "0-5"
+    - "5-17"
+    - "18+"
+
+# Output settings
+output:
+  figures: "outputs/figures/"
+  tables: "outputs/tables/"
+  insights: "outputs/insights/"
+  models: "models/"
+  
+  report:
+    format: "pdf"
+    include_code: true
+    page_size: "A4"
+
+# Performance settings
+performance:
+  n_jobs: -1  # Use all available cores
+  cache_enabled: true
+  verbose: 1
